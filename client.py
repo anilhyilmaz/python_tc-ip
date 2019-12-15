@@ -1,15 +1,18 @@
-import socketserver,socket
+# Python TCP Client A
+import socket 
 
-host_ip = "127.0.0.1"
-host_port = 50000
+host = socket.gethostname() 
+port = 2004
+BUFFER_SIZE = 2000 
+MESSAGE = input("tcpClientA: Enter message/ Enter exit:") 
+ 
+tcpClientA = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+tcpClientA.connect((host, port))
 
-s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-s.connect((host_ip,host_port))
-message = input(" -> ")  # take input
+while MESSAGE != 'exit':
+    tcpClientA.send(MESSAGE.encode())     
+    data = tcpClientA.recv(BUFFER_SIZE)
+    print(" Client2 received data:", data)
+    MESSAGE = raw_input("tcpClientA: Enter message to continue/ Enter exit:")
 
-while message.lower().strip() != 'bye':
-        s.send(message.encode())  # send message
-        data = s.recv(1024).decode()  # receive response
-        print('Received from server: ' + data)  # show in terminal
-        message = input(" -> ")  # again take input
-s.close()  # close the connection
+tcpClientA.close() 
